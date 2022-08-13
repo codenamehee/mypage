@@ -95,7 +95,7 @@
             // 바로 아래 ; 안 넣었도 되는 거냐??
             });
         }
-        function show_comment()
+        function show_comment() {
             $('#comment-list').empty()
             $.ajax({
                 type: "GET",
@@ -118,11 +118,11 @@
                                             </div>
                                         </div>`
 
-                        $('#comment-list').append(temp_html)                     `
-                                    }
-                                }
-                            });
-                            
+                        $('#comment-list').append(temp_html)
+                    }
+                }
+            });
+        }
         </script>
 </head>
 <body>
