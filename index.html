@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -13,135 +12,130 @@
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
         crossorigin="anonymous"></script>
 
-    <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap" rel="stylesheet">
 
-    <title>선착순 공동구매</title>
+    <title>인생 버킷리스트</title>
 
     <style>
         * {
-            font-family: 'Gowun Batang', serif;
-            color: white;
+            font-family: 'Gowun Dodum', sans-serif;
         }
+        .mypic {
+            width: 100%;
+            height: 200px;
 
-        body {
-            background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://cdn.aitimes.com/news/photo/202010/132592_129694_3139.jpg');
+            background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1601024445121-e5b82f020549?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1189&q=80');
             background-position: center;
             background-size: cover;
+
+            color: white;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .mypic > h1 {
+            font-size: 30px;
+        }
+        .mybox {
+            width: 95%;
+            max-width: 700px;
+            padding: 20px;
+            box-shadow: 0px 0px 10px 0px lightblue;
+            margin: 20px auto;
+        }
+        .mybucket {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
         }
 
-        h1 {
-            font-weight: bold;
+        .mybucket > input {
+            width: 70%;
         }
+        .mybox > li {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
 
-        .order {
-            width: 500px;
-            margin: 60px auto 0px auto;
-            padding-bottom: 60px;
+            margin-bottom: 10px;
+            min-height: 48px;
         }
-
-        .mybtn {
-            width: 100%;
+        .mybox > li > h2 {
+            max-width: 75%;
+            font-size: 20px;
+            font-weight: 500;
+            margin-right: auto;
+            margin-bottom: 0px;
         }
-
-        .order>table {
-            margin: 40px 0;
-            font-size: 18px;
-        }
-
-        option {
-            color: black;
+        .mybox > li > h2.done {
+            text-decoration:line-through
         }
     </style>
     <script>
         $(document).ready(function () {
-            show_order();
+            show_bucket();
         });
-        function show_order() {
-            let name = $('#name').val()
-            let address = $('#address').val()
-            let size = $('#size').val()
+        function show_bucket(){
+            $.ajax({
+                type: "GET",
+                url: "/bucket",
+                data: {},
+                success: function (response) {
+                    alert(response["msg"])
+                }
+            });
+        }
+        function save_bucket(){
+            let bucket = $('#bucket').val
 
             $.ajax({
-                type: 'GET',
-                url: '/mars',
-                data: {name_give: name, address_give: address, size_give: size},
+                type: "POST",
+                url: "/bucket",
+                data: {bucket_give:bucket},
                 success: function (response) {
-                    alert(response['msg'])
+                    alert(response["msg"])
                     window.location.reload()
                 }
             });
         }
-        function save_order() {
+        function done_bucket(num){
             $.ajax({
-                type: 'POST',
-                url: '/mars',
-                data: { sample_give: '데이터전송' },
+                type: "POST",
+                url: "/bucket/done",
+                data: {sameple_give:'데이터전송'},
                 success: function (response) {
-                    alert(response['msg'])
+                    alert(response["msg"])
                 }
             });
         }
     </script>
 </head>
-
 <body>
-    <div class="mask"></div>
-    <div class="order">
-        <h1>화성에 땅 사놓기!</h1>
-        <h3>가격: 평 당 500원</h3>
-        <p>
-            화성에 땅을 사둘 수 있다고?<br />
-            앞으로 백년 간 오지 않을 기회. 화성에서 즐기는 노후!
-        </p>
-        <div class="order-info">
-            <div class="input-group mb-3">
-                <span class="input-group-text">이름</span>
-                <input id="name" type="text" class="form-control">
-            </div>
-            <div class="input-group mb-3">
-                <span class="input-group-text">주소</span>
-                <input id="address" type="text" class="form-control">
-            </div>
-            <div class="input-group mb-3">
-                <label class="input-group-text" for="size">평수</label>
-                <select class="form-select" id="size">
-                    <option selected>-- 주문 평수 --</option>
-                    <option value="10평">10평</option>
-                    <option value="20평">20평</option>
-                    <option value="30평">30평</option>
-                    <option value="40평">40평</option>
-                    <option value="50평">50평</option>
-                </select>
-            </div>
-            <button onclick="save_order()" type="button" class="btn btn-warning mybtn">주문하기</button>
+    <div class="mypic">
+        <h1>나의 버킷리스트</h1>
+    </div>
+    <div class="mybox">
+        <div class="mybucket">
+            <input id="bucket" class="form-control" type="text" placeholder="이루고 싶은 것을 입력하세요">
+            <button onclick="save_bucket()" type="button" class="btn btn-outline-primary">기록하기</button>
         </div>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th scope="col">이름</th>
-                    <th scope="col">주소</th>
-                    <th scope="col">평수</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>홍길동</td>
-                    <td>서울시 용산구</td>
-                    <td>20평</td>
-                </tr>
-                <tr>
-                    <td>임꺽정</td>
-                    <td>부산시 동구</td>
-                    <td>10평</td>
-                </tr>
-                <tr>
-                    <td>세종대왕</td>
-                    <td>세종시 대왕구</td>
-                    <td>30평</td>
-                </tr>
-            </tbody>
-        </table>
+    </div>
+    <div class="mybox" id="bucket-list">
+        <li>
+            <h2>✅ 호주에서 스카이다이빙 하기</h2>
+            <button onclick="done_bucket(5)" type="button" class="btn btn-outline-primary">완료!</button>
+        </li>
+        <li>
+            <h2 class="done">✅ 호주에서 스카이다이빙 하기</h2>
+        </li>
+        <li>
+            <h2>✅ 호주에서 스카이다이빙 하기</h2>
+            <button type="button" class="btn btn-outline-primary">완료!</button>
+        </li>
     </div>
 </body>
-
 </html>
